@@ -133,8 +133,16 @@ class PuzzlePage extends React.Component {
                 </Button>
               </NavLink>
             </Grid>
-            <Grid item xs={10} key={0}>
+            <Grid item xs={1} key={0}/>
+            <Grid item xs={8} key={0}>
               <h1 style={{ marginBottom: "0px" }}>{"#" + this.state.puzzleId + ": " + this.state.name}</h1>
+            </Grid>
+            <Grid item xs={1} key={0}>
+              <NavLink activeClassName="active" className="link" to={"/puzzles/" + (this.state.puzzleId - 1)}>
+                  <Button variant="contained" color="primary" className={classes.nextButton} onClick={this.nextPage} disabled={this.state.puzzleId === 1} type="submit">
+                      PREV
+                  </Button>
+                </NavLink>  
             </Grid>
             <Grid item xs={1} key={0}>
               <NavLink activeClassName="active" className="link" to={"/puzzles/" + (this.state.puzzleId + 1)}>
