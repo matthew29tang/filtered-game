@@ -79,8 +79,8 @@ class PuzzlePage extends React.Component {
 
   updateTextField = (e) => {
     let newValue = e.target.value;
-    if (/[^a-zA-Z0-9\t\n.\/<>?;:"'`!@#$%^&*()\[\]{}_+=|\\-]/.test(newValue)) {
-      this.setState({ errorText: `Messages must only contain characters found on a regular keyboard (excluding spaces): a-zA-Z0-9\t\n.\/<>?;:"'!@#$%^&*()\[\]{}_+=|\\-~` + "`"});
+    if (/[^a-zA-Z0-9.\/<>?;:"'`!@#$%^&*()\[\]{}_+=|\\-]/.test(newValue)) {
+      this.setState({ errorText: `Messages must only contain characters found on a regular keyboard (excluding spaces): a-zA-Z0-9.\/<>?;:"'!@#$%^&*()\[\]{}_+=|\\-~` + "`"});
     } else if (newValue.length > 30) {
       this.setState({ errorText: "Message length must be <=30 characters" });
     } else {
@@ -128,7 +128,7 @@ class PuzzlePage extends React.Component {
           <Grid container spacing={4} style={{ paddingLeft: "20px", paddingRight: "20px" }}>
             <Grid item xs={1} key={0}>
               <NavLink activeClassName="active" className="link" to={"/puzzles/"}>
-                <Button variant="contained" color="primary" className={classes.nextButton} onClick={this.nextPage} disabled={this.state.errorText} type="submit">
+                <Button variant="contained" color="primary" className={classes.nextButton} onClick={this.nextPage} type="submit">
                   BACK
                 </Button>
               </NavLink>

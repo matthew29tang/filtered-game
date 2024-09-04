@@ -25,7 +25,7 @@ class Home extends React.Component {
           <h3 style={{ marginBottom: "0px" }}>JamminAI has made its debut, but messages are getting blocked by its safety filters! <br/>Send messages to see which get blocked to deduce the rules for the safety filters.</h3>
           <div> <br/>
           <h3>Rules:</h3>
-          {`1) Messages must only contain characters found on a regular keyboard (excluding spaces): a-zA-Z0-9\t\n.\/<>?;:"'!@#$%^&*()\[\]{}_+=|\\-~` + "`"}
+          {`1) Messages must only contain characters found on a regular keyboard (excluding spaces): a-zA-Z0-9.\/<>?;:"'!@#$%^&*()\[\]{}_+=|\\-~` + "`"}
           </div>
           {`2) Message length must be <=30 characters`}
           <br/>
