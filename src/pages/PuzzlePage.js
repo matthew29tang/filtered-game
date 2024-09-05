@@ -183,6 +183,7 @@ class PuzzlePage extends React.Component {
             <br/>
             <form autoComplete="off" onSubmit={this.submitAnswer}>
               <TextField
+                autoFocus
                 value={this.state.textField}
                 onChange={this.updateTextField}
                 error={this.state.errorText !== ""}
