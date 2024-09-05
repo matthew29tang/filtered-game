@@ -24,6 +24,9 @@ import { ThemeContext, DEBUG_MODE } from "../util/config.js";
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
+const MAX_PER_COOKIE = 40;
+const COOKIE_SUFFIX = ['a', 'b', 'c', 'd', 'e']
+const MAX_COOKIES = COOKIE_SUFFIX.length;
 
 let theme = createMuiTheme();
 theme = responsiveFontSizes(theme);
@@ -45,8 +48,10 @@ class NavBar extends React.Component {
     if (!ans) {
       return;
     }
-    for (var i = 1; i < 10; i++) {
-      cookies.remove("puzzle" + i, { path: '/' });
+    for (var i = 1; i <= 12; i++) {
+      for (var j = 0; j < MAX_COOKIES; j++) {
+        cookies.remove("puzzle" + i + COOKIE_SUFFIX[j], { path: '/' });
+      }
     }
     console.log("Progress reset");
     window.location.reload();
@@ -112,14 +117,13 @@ class NavBar extends React.Component {
                   <Grid item xs={4} key={3} >
                     <div style={{ textAlign: 'right', paddingTop: "2px", display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
                       <Router>
-
+                      <NavLink activeClassName="active" className="link" to={"/"} type="menu" style={{ marginRight: '20px' }}>
+                          <Button color="inherit">Home</Button>
+                        </NavLink>
                         <NavLink activeClassName="active" className="link" to={"/puzzles/"} type="menu" style={{ marginRight: '20px' }}>
                           <Button color="inherit">Puzzles</Button>
                         </NavLink>
                         <BrowserView>
-                          <NavLink activeClassName="active" className="link" to={"/about/"} type="menu" style={{ marginRight: '20px' }}>
-                            <Button color="inherit">About</Button>
-                          </NavLink>
                           <NavLink activeClassName="active" className="link" type="menu" style={{ marginRight: '20px' }}>
                           <Button color="inherit" onClick={this.resetProgress}>Reset</Button>
                         </NavLink>

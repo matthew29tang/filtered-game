@@ -1,5 +1,23 @@
 import React from 'react';
 
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
+const rrWords = (msg) => {
+  const words = ['a', 'love', 'and', 'run', 'down', 'guy', 'from', 'to', 'cry', "we've", "we're", "commitment's", "you're", 'but', 'we', 'lie', 'for', 'gotta', 'how', 'on', 'desert', 'aching,', "what's", 'wanna', 'up', 'me', 'your', 'a', 'so', 'do', 'see', 'ask', 'been', 'hurt', 'full', 'inside,', 'each', 'we', 'know', 'get', 'game', 'any', 'and', 'feeling', 'understand', 'never', 'rules', 'gonna', "heart's", 'play', 'make', 'too', 'around', "we're", 'both', "don't", 'tell', 'give', 'i', 'goodbye', 'no', 'going', 'blind', 'it', 'shy', 'if', 'you', 'what', 'this', 'of', 'just', 'long', 'thinking', 'other', 'you', "wouldn't", 'say', 'give,', 'let', 'known', 'strangers', 'the', 'never', "i'm"];
+  return words.includes(msg.toLowerCase());
+}
+
+const states = (msg) => {
+  const words = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
+  return words.includes(msg.toLowerCase());
+}
+
 function isSubSequence(s1, s2, m, n)
 {
     
@@ -150,6 +168,22 @@ let puzzleInfo = [
     points: 0
   }, {
     puzzleId: 1,
+    name: "WHATS MY NAME?",
+    points: 1,
+    body: (<div><br/>Hint: Be thorough with your inputs!</div>),
+    filter_fn: (msg) => {
+      return isSubSequence("matt", msg, 4, msg.length)
+    },
+    answer: "Message must contain 'matt' as a subsequence"
+  }, {
+    puzzleId: 2,
+    name: "Don't @ me",
+    points: 1,
+    body: (<div></div>),
+    filter_fn: validateEmail,
+    answer: "Must be a valid email"
+  }, {
+    puzzleId: 3,
     name: "A basic test",
     points: 2,
     body: (<div></div>),
@@ -158,9 +192,10 @@ let puzzleInfo = [
     },
     answer: "Must contain the letter 'a'"
   }, {
-    puzzleId: 2,
+
+    puzzleId: 4,
     name: "U-NICK",
-    points: 3,
+    points: 2,
     body: (<div></div>),
     filter_fn: (msg) => {
       const charCount = msg.split('').reduce((acc, char) => {
@@ -173,53 +208,63 @@ let puzzleInfo = [
     },
     answer: "Letters may only be used at most once (are unique)."
   }, {
-    puzzleId: 3,
+    puzzleId: 5,
     name: "2hard4you",
-    points: 4,
-    body: (<div></div>),
+    points: 2,
+    body: (<div><br/>Hint: Try small inputs</div>),
     filter_fn: (msg) => {
       return (Math.log(msg)/Math.log(2)) % 1 === 0;
     },
     answer: "Message must be a power of 2."
   }, {
-    puzzleId: 4,
-    name: "WHATS MY NAME?",
-    points: 4,
-    body: (<div></div>),
-    filter_fn: (msg) => {
-      return isSubSequence("matt", msg, 4, msg.length)
-    },
-    answer: "Message must contain 'matt' as a subsequence"
-  }, {
-    puzzleId: 5,
+
+    puzzleId: 6,
     name: "Key Bored",
-    points: 6,
+    points: 3,
     body: (<div></div>),
     filter_fn: (msg) => {
       return /^(([A-Ga-g]{1})(\#|b{1})?)+$/.test(msg)
     },
     answer: "Message must be able to be written as music letter notes (Ex. A#, Cb, etc.)"
   }, {
-    puzzleId: 6,
+    puzzleId: 7,
     name: "BaNaNaS",
-    points: 8,
+    points: 4,
     body: (<div></div>),
     filter_fn: periodicSentence,
     answer: "Message must be able to be written using abbreviations of elements of the Periodic Table of Elements"
   }, {
-    puzzleId: 7,
-    name: "Legal Name",
-    points: 8,
+    puzzleId: 8,
+    name: "Stars and stripes",
+    points: 5,
     body: (<div></div>),
+    filter_fn: states,
+    answer: "Message must be a state abbreviation"
+  }, {
+    puzzleId: 9,
+    name: "Legal Name",
+    points: 6,
+    body: (<div><br/>Hint: Be thorough with your testing!</div>),
     filter_fn: (msg) => {
       return /^[a-zA-Z_$][\w$]*$/.test(msg)
     },
     answer: "Message must be a valid Python variable name."
   }, {
-    puzzleId: 8,
+    puzzleId: 10,
+    name: "Search and Replace",
+    points: 7,
+    body: (<div><br/>Hint: Be thorough with your testing!</div>),
+    filter_fn: (msg) => {
+      var regex = new RegExp(msg);
+      regex.test("test message");
+      return true;
+    },
+    answer: "Message must be a valid Regex expression (in JS)"
+  }, {
+    puzzleId: 11,
     name: "Which rows?",
-    points: 15,
-    body: (<div></div>),
+    points: 8,
+    body: (<div><br/>Hint: Be thorough with your testing!</div>),
     filter_fn: (msg) => {
       let row1 = new Set("zxcvbnm,./<>?".split(""));
       let row2 = new Set(`asdfghjkl;':"'`.split(""));
@@ -246,6 +291,13 @@ let puzzleInfo = [
       return true;
     },
     answer: "The next letter in the message must come from a different row on the keyboard."
+  }, {
+    puzzleId: 12,
+    name: "Never say Never",
+    points: 9,
+    body: (<div></div>),
+    filter_fn: rrWords,
+    answer: "Message must be a word from Rickroll"
   }
 ];
 

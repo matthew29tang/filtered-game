@@ -18,13 +18,18 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
+const MAX_PER_COOKIE = 40;
+const COOKIE_SUFFIX = ['a', 'b', 'c', 'd', 'e']
+const MAX_COOKIES = COOKIE_SUFFIX.length;
+const MAX_PUZZLES = 12;
+
 class PuzzlePage extends React.Component {
   static contextType = ThemeContext;
 
   constructor(props) {
     super(props);
     let puzzleId = parseInt(props.match.params.puzzleId);
-    if (puzzleId > 8) {
+    if (puzzleId > MAX_PUZZLES) {
       this.state = {invalid: true};
       return;
     }
@@ -49,8 +54,13 @@ class PuzzlePage extends React.Component {
       hideIncorrect: false,
       textFieldDisabled: false,
     }
-    let stored_progress = cookies.get("puzzle" + puzzleId);
-    console.log(stored_progress)
+    let stored_progress = [];
+    for (var i = 0; i < MAX_COOKIES; i++) {
+      let cookie_data = cookies.get("puzzle" + puzzleId + COOKIE_SUFFIX[i]);
+      if (cookie_data) {
+        stored_progress = stored_progress.concat(cookie_data);
+      }
+    }
     if (stored_progress) {
       this.state.teamGuesses = stored_progress;
     }
@@ -63,11 +73,11 @@ class PuzzlePage extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service
-    for (var i = 1; i < 10; i++) {
-      cookies.remove("puzzle" + i, { path: '/' });
+    for (var i = 0; i < MAX_COOKIES; i++) {
+      cookies.remove("puzzle" + this.state.puzzleId + COOKIE_SUFFIX[i], { path: '/' });
     }
-    alert("Malformed save data detected, wiping saved attempts");
+    console.log(error, errorInfo);
+    alert("Malformed save data detected, wiping saved attempts for this puzzle");
     window.location.reload();
   }
 
@@ -79,7 +89,7 @@ class PuzzlePage extends React.Component {
 
   updateTextField = (e) => {
     let newValue = e.target.value;
-    if (/[^a-zA-Z0-9.\/<>?;:"'`!@#$%^&*()\[\]{}_+=|\\-]/.test(newValue)) {
+    if (/[^a-zA-Z0-9.\/<>?;:"'`!@#$%^&*()\[\]{}_+=|\\-~]/.test(newValue)) {
       this.setState({ errorText: `Messages must only contain characters found on a regular keyboard (excluding spaces): a-zA-Z0-9.\/<>?;:"'!@#$%^&*()\[\]{}_+=|\\-~` + "`"});
     } else if (newValue.length > 30) {
       this.setState({ errorText: "Message length must be <=30 characters" });
@@ -106,7 +116,15 @@ class PuzzlePage extends React.Component {
 
     this.setState(prevState => {
       prevState.teamGuesses.push(responsePayload);
-      cookies.set("puzzle" + prevState.puzzleId, JSON.stringify(prevState.teamGuesses));
+      let offset = Math.max(prevState.teamGuesses.length - MAX_COOKIES * MAX_PER_COOKIE, 0)
+      for (var i = 0; i < MAX_COOKIES; i++) {
+        let start = i * MAX_PER_COOKIE + offset;
+        let guessSlice = prevState.teamGuesses.slice(start, start + MAX_PER_COOKIE);
+        if (guessSlice.length > 0) {
+          cookies.set("puzzle" + prevState.puzzleId + COOKIE_SUFFIX[i], JSON.stringify(guessSlice));
+        }
+      }
+      
       return { teamGuesses: prevState.teamGuesses, textField: "" }
     });
   }
@@ -146,7 +164,7 @@ class PuzzlePage extends React.Component {
             </Grid>
             <Grid item xs={1} key={0}>
               <NavLink activeClassName="active" className="link" to={"/puzzles/" + (this.state.puzzleId + 1)}>
-                <Button variant="contained" color="primary" className={classes.nextButton} onClick={this.nextPage} disabled={this.state.puzzleId === 8} type="submit">
+                <Button variant="contained" color="primary" className={classes.nextButton} onClick={this.nextPage} disabled={this.state.puzzleId >= 12} type="submit">
                     NEXT
                 </Button>
               </NavLink>
@@ -157,9 +175,10 @@ class PuzzlePage extends React.Component {
             <Divider />
             <br />
             <div className={classes.body}>
-              
-              <center><div>Attempts will be saved in a browser cookie. Due to cookie size limitations, saved attempts may be truncated (starting at around ~45 attempts).</div></center>
+            <center>
+              <i><div>Attempts will be saved in browser cookies. Due to cookie size limitations, only the most recent 200 attempts are saved.</div></i>
               {this.state.body}
+              </center>
             </div>
             <br/>
             <form autoComplete="off" onSubmit={this.submitAnswer}>
