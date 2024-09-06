@@ -89,7 +89,7 @@ class PuzzlePage extends React.Component {
 
   updateTextField = (e) => {
     let newValue = e.target.value;
-    if (/[^a-zA-Z0-9.\/<>?;:"'`!@#$%^&*()\[\]{}_+=|\\-~]/.test(newValue)) {
+    if (/[^a-zA-Z0-9.\/<>?;:"'`!@#$%^&*()\[\]{}_+=|\\~\-]/.test(newValue)) {
       this.setState({ errorText: `Messages must only contain characters found on a regular keyboard (excluding spaces): a-zA-Z0-9.\/<>?;:"'!@#$%^&*()\[\]{}_+=|\\-~` + "`"});
     } else if (newValue.length > 30) {
       this.setState({ errorText: "Message length must be <=30 characters" });
@@ -171,7 +171,7 @@ class PuzzlePage extends React.Component {
             </Grid>
             </Grid>
             
-            <h2 style={{ marginTop: "5px", marginBottom: "5px" }}>{this.state.pts} points</h2>
+            <h2 style={{ marginTop: "5px", marginBottom: "5px" }}>{this.state.pts} {this.state.pts > 1 ? "points" : "point"}</h2>
             <Divider />
             <br />
             <div className={classes.body}>

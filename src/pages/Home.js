@@ -27,9 +27,13 @@ class Home extends React.Component {
           <h3>Rules:</h3>
           {`1) Messages must only contain characters found on a regular keyboard (excluding spaces): a-zA-Z0-9.\/<>?;:"'!@#$%^&*()\[\]{}_+=|\\-~` + "`"}
           </div>
-          {`2) Message length must be <=30 characters`}
+          {`2) Message length must be <=30 characters.`}
           <br/>
-          {`3) Filter rules are a single phrase rules without any "AND" or "OR" clauses`}
+          {`3) Filter rules are single phrase rules without any "AND" or "OR" clauses. Partial credit may be awarded.`}
+          <br/>
+          {`4) Filter rules may be correlated with message length, but do not place explicit length restrictions.`}
+          <br/>
+          {`5) The puzzle name is related to the filter rule. Harder rules may contain hints inline.`}
           <br /> <br/>
           <div><NavLink activeClassName="active" className="link" to={"/puzzles"} type="menu">
             <Button variant="contained" color="primary" className={classes.button}>
