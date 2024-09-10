@@ -255,7 +255,7 @@ let puzzleInfo = [
     answer: "Message must be a valid Python variable name."
   }, {
     puzzleId: 10,
-    name: "?TOCK TICK (ER)",
+    name: "TOCK TICK-OR",
     points: 7,
     body: (<div><br/>Hint: Try small inputs that are not real words.</div>),
     filter_fn: states,
