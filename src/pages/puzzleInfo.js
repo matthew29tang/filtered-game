@@ -238,7 +238,7 @@ let puzzleInfo = [
     puzzleId: 8,
     name: "Search and Replace",
     points: 5,
-    body: (<div><br/>Hint: How does search and replace <b>REGULAR</b>ly work?</div>),
+    body: (<div><br/>Hint: Try inputting different Regexs and see what they have in common.</div>),
     filter_fn: (msg) => {
       var regex = new RegExp("^" + msg + "$");
       return regex.test("regex");
