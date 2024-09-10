@@ -255,9 +255,9 @@ let puzzleInfo = [
     answer: "Message must be a valid Python variable name."
   }, {
     puzzleId: 10,
-    name: "TICK ?TOCK",
+    name: "?TOCK TICK (ER)",
     points: 7,
-    body: (<div><br/>Hint: Try small inputs</div>),
+    body: (<div><br/>Hint: Try small inputs that are not real words.</div>),
     filter_fn: states,
     answer: "Message must be a NASDAQ stock ticker (no ETFs)"
   }, {
@@ -296,7 +296,7 @@ let puzzleInfo = [
     puzzleId: 12,
     name: "Never say Never",
     points: 9,
-    body: (<div></div>),
+    body: (<div><br/>Hint: What's the name of the generative model? Now connect that to the puzzle name.</div>),
     filter_fn: rrWords,
     answer: "Message must be a word from Rickroll"
   }
